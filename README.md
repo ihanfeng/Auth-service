@@ -1,5 +1,58 @@
 ## 项目使用方法
 
+
+### 2018.1.8 更新
+本次更新添加了对授权码模式的使用
+
+授权码模式需要用户登录，所以借助浏览器
+
+首先给数据库表中的`oauth_client_details`表中`client_id`为`frontend`的行`authorized_grant_types`添加`authorization_code`，`web_server_redirect_uri`设置为`http://localhost:8080`。表示该客户端允许授权码模式以及授权码回调地址为http://localhost:8080
+
+浏览器访问地址
+
+```yaml
+http://localhost:9000/oauth/authorize?response_type=code&client_id=frontend&
+scope=all&redirect_uri=http://localhost:8080
+```
+
+
+进入登录授权页面并同意授权，从回调地址中获取授权码
+
+```yaml
+http://localhost:8080/?code=xGjrTm
+```
+
+通过授权码获取access_token
+
+```yaml
+method: post 
+url: http://localhost:9000/oauth/token?grant_type=authorization_code
+header:
+{
+  Authorization: Basic ZnJvbnRlbmQ6ZnJvbnRlbmQ=,
+  Content-Type: application/x-www-form-urlencoded
+}
+body:
+{
+  code: xGjrTm,
+  redirect_url: http://localhost:8080
+}
+```
+
+
+### 2017.12.11 更新
+
+**单独的整合项目地址为：   
+GitHub：https://github.com/keets2012/microservice-integration   
+或者 码云：https://gitee.com/keets/microservice-integration**
+
+
+本次更新主要是增加了user,role,permission的相应接口。整合了微服务架构下，网关与auth权限服务、后端backend服务。
+
+具体见博客[微服务架构中整合网关、权限服务](http://blueskykong.com/2017/12/10/integration/) 。感谢黄同学@CANGWU 对Spring EL部分做的修改。
+
+项目整合如果遇到问题，可以加入qq群649932629，最好大家都能自行搞定。。
+
 ### 2017.11.3 更新
 
 **去掉了Parent依赖，安装后，直接`mvn clean spring-boot:run` (maven 如果没装我也不好说啥)**
